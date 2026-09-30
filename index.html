@@ -1,0 +1,344 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CleanTrack - Smart Waste Reporting</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- ================= HEADER ================= -->
+
+    <header class="topbar">
+
+        <div class="logo">
+            ♻ <span>CleanTrack</span>
+        </div>
+
+        <nav>
+            <button type="button" id="reportTab" class="nav-button nav-active">
+                Report Waste
+            </button>
+
+            <button type="button" id="adminTab" class="nav-button">
+                Admin Dashboard
+            </button>
+        </nav>
+
+    </header>
+
+
+    <!-- ================= MAIN ================= -->
+
+    <main>
+
+        <!-- HERO -->
+
+        <section class="hero">
+
+            <div class="hero-content">
+
+                <span class="tag">
+                    SMART CAMPUS INITIATIVE
+                </span>
+
+                <h1>
+                    A Cleaner Campus
+                    <br>
+                    Starts With You.
+                </h1>
+
+                <p>
+                    Report waste. Track action. Keep our campus clean.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= REPORT PAGE ================= -->
+
+        <section id="reportPage" class="panel">
+
+            <h2>Report Waste</h2>
+
+            <p class="muted">
+                Found a waste problem? Report it to the campus cleaning team.
+            </p>
+
+
+            <form id="reportForm">
+
+                <!-- NAME -->
+
+                <label for="name">
+                    Your Name
+                </label>
+
+                <input
+                    type="text"
+                    id="name"
+                    placeholder="Enter your name"
+                    required
+                >
+
+
+                <!-- LOCATION -->
+
+                <label for="location">
+                    Location
+                </label>
+
+                <input
+                    type="text"
+                    id="location"
+                    placeholder="Example: College Main Gate"
+                    required
+                >
+
+
+                <!-- WASTE TYPE -->
+
+                <label for="wasteType">
+                    Waste Type
+                </label>
+
+                <select id="wasteType" required>
+
+                    <option value="">
+                        Select waste type
+                    </option>
+
+                    <option value="Overflowing Dustbin">
+                        Overflowing Dustbin
+                    </option>
+
+                    <option value="Plastic Waste">
+                        Plastic Waste
+                    </option>
+
+                    <option value="Food Waste">
+                        Food Waste
+                    </option>
+
+                    <option value="Paper Waste">
+                        Paper Waste
+                    </option>
+
+                    <option value="Other">
+                        Other
+                    </option>
+
+                </select>
+
+
+                <!-- PHOTO -->
+
+                <label for="photo">
+                    Upload Photo
+                </label>
+
+                <input
+                    type="file"
+                    id="photo"
+                    accept="image/*"
+                >
+
+                <small class="muted">
+                    Photo is previewed only. Firebase Storage is not required.
+                </small>
+
+                <img
+                    id="photoPreview"
+                    class="photo-preview hidden"
+                    alt="Waste photo preview"
+                >
+
+
+                <!-- DESCRIPTION -->
+
+                <label for="description">
+                    Description
+                </label>
+
+                <textarea
+                    id="description"
+                    rows="5"
+                    placeholder="Describe the waste problem..."
+                ></textarea>
+
+
+                <!-- SUBMIT -->
+
+                <button
+                    type="submit"
+                    class="primary-button"
+                    id="submitReportButton"
+                >
+                    Submit Report
+                </button>
+
+            </form>
+
+            <p id="message"></p>
+
+        </section>
+
+
+        <!-- ================= ADMIN LOGIN ================= -->
+
+        <section id="loginPage" class="panel hidden">
+
+            <h2>
+                Admin Login
+            </h2>
+
+            <p class="muted">
+                Login to manage campus waste reports.
+            </p>
+
+
+            <form id="loginForm">
+
+                <label for="adminEmail">
+                    Email
+                </label>
+
+                <input
+                    type="email"
+                    id="adminEmail"
+                    placeholder="Admin email"
+                    required
+                >
+
+
+                <label for="adminPassword">
+                    Password
+                </label>
+
+                <input
+                    type="password"
+                    id="adminPassword"
+                    placeholder="Admin password"
+                    required
+                >
+
+
+                <button
+                    type="submit"
+                    class="primary-button"
+                >
+                    Login
+                </button>
+
+            </form>
+
+            <p id="loginMessage"></p>
+
+        </section>
+
+
+        <!-- ================= ADMIN DASHBOARD ================= -->
+
+        <section id="adminPage" class="panel hidden">
+
+            <div class="dashboard-header">
+
+                <div>
+
+                    <h2>
+                        Admin Dashboard
+                    </h2>
+
+                    <p class="muted">
+                        Manage campus waste reports.
+                    </p>
+
+                </div>
+
+                <button
+                    type="button"
+                    id="logoutButton"
+                    class="logout-button"
+                >
+                    Logout
+                </button>
+
+            </div>
+
+
+            <!-- STATISTICS -->
+
+            <div class="stats">
+
+                <div class="stat-card">
+                    <strong id="totalCount">0</strong>
+                    <span>Total Reports</span>
+                </div>
+
+                <div class="stat-card">
+                    <strong id="pendingCount">0</strong>
+                    <span>Pending</span>
+                </div>
+
+                <div class="stat-card">
+                    <strong id="progressCount">0</strong>
+                    <span>In Progress</span>
+                </div>
+
+                <div class="stat-card">
+                    <strong id="resolvedCount">0</strong>
+                    <span>Resolved</span>
+                </div>
+
+            </div>
+
+
+            <!-- REPORT LIST -->
+
+            <h3>
+                Waste Reports
+            </h3>
+
+            <div id="reportsList">
+
+                <p class="muted">
+                    No reports found.
+                </p>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- ================= FOOTER ================= -->
+
+    <footer>
+
+        <strong>
+            CleanTrack © 2026
+        </strong>
+
+        <br>
+
+        Building a cleaner campus together.
+
+    </footer>
+
+
+    <!-- ================= JAVASCRIPT ================= -->
+
+    <script type="module" src="app.js"></script>
+
+</body>
+
+</html>

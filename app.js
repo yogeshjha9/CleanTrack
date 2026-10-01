@@ -6,6 +6,82 @@
 import {
     initializeApp
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+let map;
+let marker;
+let selectedLatitude = null;
+let selectedLongitude = null;
+function initializeMap() {
+    const defaultLocation = {
+        lat: 28.6139,
+        lng: 77.2090
+    };
+
+    map = new google.maps.Map(document.getElementById("map"), {
+        center: defaultLocation,
+        zoom: 15
+    });
+
+    marker = new google.maps.Marker({
+        position: defaultLocation,
+        map: map,
+        draggable: true
+    });
+
+    selectedLatitude = defaultLocation.lat;
+    selectedLongitude = defaultLocation.lng;
+
+    marker.addListener("dragend", () => {
+        const position = marker.getPosition();
+
+        selectedLatitude = position.lat();
+        selectedLongitude = position.lng();
+
+        document.getElementById("locationMessage").textContent =
+            `Selected location: ${selectedLatitude.toFixed(6)}, ${selectedLongitude.toFixed(6)}`;
+    });
+}
+window.addEventListener("load", () => {
+    initializeMap();
+});
+const useLocationButton = document.getElementById("useLocationButton");
+
+useLocationButton.addEventListener("click", () => {
+    if (!navigator.geolocation) {
+        document.getElementById("locationMessage").textContent =
+            "Geolocation is not supported by this browser.";
+        return;
+    }
+
+    document.getElementById("locationMessage").textContent =
+        "Getting your location...";
+
+    navigator.geolocation.getCurrentPosition(
+        (position) => {
+            selectedLatitude = position.coords.latitude;
+            selectedLongitude = position.coords.longitude;
+
+            const userLocation = {
+                lat: selectedLatitude,
+                lng: selectedLongitude
+            };
+
+            map.setCenter(userLocation);
+            map.setZoom(17);
+
+            marker.setPosition(userLocation);
+
+            document.getElementById("location").value =
+                `${selectedLatitude.toFixed(6)}, ${selectedLongitude.toFixed(6)}`;
+
+            document.getElementById("locationMessage").textContent =
+                `Location selected: ${selectedLatitude.toFixed(6)}, ${selectedLongitude.toFixed(6)}`;
+        },
+        (error) => {
+            document.getElementById("locationMessage").textContent =
+                "Unable to get your location. Please allow location permission.";
+        }
+    );
+});
 
 import {
     getFirestore,
@@ -345,31 +421,17 @@ reportForm.addEventListener("submit", async function (event) {
 
         // Save report to Firestore
 
-        await addDoc(
-            collection(db, "reports"),
-            {
-
-                name: name,
-
-                location: location,
-
-                wasteType: wasteType,
-
-                description: description,
-
-                // Because Firebase Storage
-                // is not enabled,
-                // we only remember whether
-                // a photo was selected.
-
-                hasPhoto: Boolean(photo),
-
-                status: "Pending",
-
-                createdAt: serverTimestamp()
-
-            }
-        );
+        await addDoc(collection(db, "reports"), {
+    name,
+    location,
+    latitude: selectedLatitude,
+    longitude: selectedLongitude,
+    wasteType,
+    description,
+    hasPhoto: Boolean(photo),
+    status: "Pending",
+    createdAt: serverTimestamp()
+});
 
 
         // Success

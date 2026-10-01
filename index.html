@@ -92,16 +92,24 @@
 
                 <!-- LOCATION -->
 
-                <label for="location">
-                    Location
-                </label>
+               <label for="location">Location</label>
 
-                <input
-                    type="text"
-                    id="location"
-                    placeholder="Example: College Main Gate"
-                    required
-                >
+<div class="location-row">
+    <input
+        type="text"
+        id="location"
+        placeholder="Enter location or use GPS"
+        required
+    >
+
+    <button type="button" id="useLocationButton" class="secondary-button">
+        📍 Use My Location
+    </button>
+</div>
+
+<div id="map"></div>
+
+<p id="locationMessage" class="muted"></p>
 
 
                 <!-- WASTE TYPE -->
@@ -338,6 +346,10 @@
     <!-- ================= JAVASCRIPT ================= -->
 
     <script type="module" src="app.js"></script>
+    <script
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBFat2ZIIF7u2r8mH8uG4Yk2BAcnw9IXHA&loading=async"
+  defer>
+</script>
 
 </body>
 
